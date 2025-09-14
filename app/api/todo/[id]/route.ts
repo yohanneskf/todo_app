@@ -3,21 +3,21 @@ import prisma from "@/prisma/client";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
-  const id = Number(params.id);
-  await prisma.todo.delete({ where: { id } });
+  const { id } = await context.params;
+  await prisma.todo.delete({ where: { id: Number(id) } });
   return NextResponse.json({ success: true });
 }
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
-  const id = Number(params.id);
+  const { id } = await context.params;
   const { title, description } = await req.json();
   const todo = await prisma.todo.update({
-    where: { id },
+    where: { id: Number(id) },
     data: { title, description },
   });
   return NextResponse.json(todo);
