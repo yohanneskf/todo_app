@@ -2,11 +2,9 @@ import { NextResponse, type NextRequest } from "next/server";
 import prisma from "@/prisma/client";
 
 // DELETE handler
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, context: any) {
   try {
+    const params = await context.params;
     const deletedTodo = await prisma.todo.delete({
       where: { id: Number(params.id) },
     });
@@ -28,11 +26,9 @@ export async function DELETE(
 }
 
 // PUT handler
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, context: any) {
   try {
+    const params = await context.params;
     const body = await request.json();
     const { title, description } = body;
 
