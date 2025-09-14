@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye } from "lucide-react";
 
 import {
   Dialog,

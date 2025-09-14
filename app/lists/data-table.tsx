@@ -33,7 +33,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
-import prisma from "@/prisma/client";
 import { useState } from "react";
 
 interface DataTableProps<TData, TValue> {
