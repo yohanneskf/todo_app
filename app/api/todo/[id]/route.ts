@@ -5,20 +5,30 @@ export async function DELETE(
   req: NextRequest,
   context: { params: { id: string } }
 ) {
-  const { id } = await context.params;
-  await prisma.todo.delete({ where: { id: Number(id) } });
-  return NextResponse.json({ success: true });
+  try {
+    const { id } = context.params;
+    await prisma.todo.delete({ where: { id: Number(id) } });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Failed to delete todo:", error);
+    return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
+  }
 }
 
 export async function PUT(
-  req: NextRequest,
+  request: Request,
   context: { params: { id: string } }
 ) {
-  const { id } = await context.params;
-  const { title, description } = await req.json();
-  const todo = await prisma.todo.update({
-    where: { id: Number(id) },
-    data: { title, description },
-  });
-  return NextResponse.json(todo);
+  try {
+    const { id } = context.params;
+    const body = await request.json();
+    const updatedTodo = await prisma.todo.update({
+      where: { id: Number(id) },
+      data: body,
+    });
+    return NextResponse.json(updatedTodo);
+  } catch (error) {
+    console.error("Failed to update todo:", error);
+    return NextResponse.json({ error: "Failed to update" }, { status: 500 });
+  }
 }
