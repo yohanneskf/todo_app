@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 
 export async function DELETE(
-  req: NextRequest,
-  context: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = context.params;
+    const { id } = params;
     await prisma.todo.delete({ where: { id: Number(id) } });
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -16,11 +16,11 @@ export async function DELETE(
 }
 
 export async function PUT(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = context.params;
+    const { id } = params;
     const body = await request.json();
     const updatedTodo = await prisma.todo.update({
       where: { id: Number(id) },
