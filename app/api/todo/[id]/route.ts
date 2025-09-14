@@ -1,16 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import prisma from "@/prisma/client";
 
-// DELETE handler to delete a ToDo item by its ID.
+// DELETE handler
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const deletedTodo = await prisma.todo.delete({
-      where: {
-        id: Number(params.id),
-      },
+      where: { id: Number(params.id) },
     });
 
     if (!deletedTodo) {
@@ -21,7 +19,7 @@ export async function DELETE(
     }
 
     return NextResponse.json(deletedTodo, { status: 200 });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to delete ToDo item." },
       { status: 500 }
@@ -29,13 +27,12 @@ export async function DELETE(
   }
 }
 
-// PUT handler to update a ToDo item by its ID.
+// PUT handler
 export async function PUT(
-  request: Request,
-  context: { params: { id: string } } // ✅ use "context" here
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { params } = context;
     const body = await request.json();
     const { title, description } = body;
 
@@ -47,13 +44,8 @@ export async function PUT(
     }
 
     const updatedTodo = await prisma.todo.update({
-      where: {
-        id: Number(params.id),
-      },
-      data: {
-        title,
-        description,
-      },
+      where: { id: Number(params.id) },
+      data: { title, description },
     });
 
     return NextResponse.json(updatedTodo, { status: 200 });
